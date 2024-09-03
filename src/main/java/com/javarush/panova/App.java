@@ -54,13 +54,13 @@ public class App {
 
 
     }
-    private static void customerRentalInventory(Customer customer){
+    public static void customerRentalInventory(Customer customer){
         Film film = FilmRepo.getFirstAvailableFilmForRent();
         Store store = StoreRepo.getStoreById((short) 1);
         Inventory inventory = new InventoryCreator(film, store).createInventory();
         Staff staff = store.getManagerStaff();
         Rental rental = new RentalCreator(inventory, customer, staff).createRental();
-        Payment payment = new PaymentCreator(customer, staff, rental, new BigDecimal(3.45)).createPayment();
+        Payment payment = new PaymentCreator(customer, staff, rental, BigDecimal.valueOf(3.45)).createPayment();
         try(Session session = SessionFactoryIns.getSessionFactory().openSession()){
             session.beginTransaction();
             session.save(inventory);
@@ -70,7 +70,7 @@ public class App {
         }
     }
 
-    private static void customerReturnInventory(Customer customer, Inventory inventory) {
+    public static void customerReturnInventory(Customer customer, Inventory inventory) {
         try(Session session = SessionFactoryIns.getSessionFactory().openSession()){
             session.beginTransaction();
             Rental rental = RentalRepo.getRentalByCustomerAndInventory(customer, inventory);
@@ -80,7 +80,7 @@ public class App {
         }
     }
 
-    private static void createAndAddCustomer() {
+    public static void createAndAddCustomer() {
         Store store = StoreRepo.getStoreById((short) 1);
         Address address = new AddressCreator(
                 "85 Workhaven Lane",
